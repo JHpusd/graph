@@ -30,11 +30,6 @@ class Tree():
             else:
                 continue
 
-    def make_child_list(self, node, edges):
-        for i in range(len(child_list)):
-            child_list[i] = TreeNode(node, child_list[i], None)
-        return child_list
-
     def build_from_edges(self):
         current_nodes = [self.root]
         while len(current_nodes) != 0:
@@ -47,3 +42,28 @@ class Tree():
                 for i in node_children:
                     all_children.append(i)
             current_nodes = list(all_children)
+    
+    def nodes_breadth_first(self):
+        queue = [self.root]
+        visited = []
+        while len(queue) != 0:
+            node = queue[0]
+            visited.append(node)
+            if node.children != None:
+                for node_child in node.children:
+                    queue.append(node_child)
+            queue.remove(node)
+        return visited
+    
+    def nodes_depth_first(self):
+        stack = [self.root]
+        visited = []
+        while len(stack) != 0:
+            top_node = stack[0]
+            visited.append(top_node)
+            if top_node.children != None:
+                for node_child in top_node.children:
+                    stack.insert(0, node_child)
+            stack.remove(top_node)
+        return visited
+
