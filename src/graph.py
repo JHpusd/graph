@@ -3,6 +3,8 @@ class GraphNode():
         self.index = index
         self.neighbors = []
         self.value = value
+        self.distance = None
+        self.previous = None
 
 class Graph():
     def __init__(self, edges):
@@ -41,4 +43,38 @@ class Graph():
                     stack.insert(0, neighbor)
             stack.remove(current_node)
         return visited
+    
+    def set_breadth_first_distance_and_previous(self, starting_node):
+        for node in self.nodes:
+            node.distance = None
+            node.previous = None
+
+        first_node = self.nodes[starting_node]
+        first_node.distance = 0
+
+        queue = [first_node]
+        visited = []
+        while len(queue) != 0:
+            current_node = queue[0]
+            visited.append(current_node)
+            for neighbor in current_node.neighbors:
+                if neighbor not in visited and neighbor not in queue:
+                    queue.append(neighbor)
+                    neighbor.distance = current_node.distance + 1
+                    neighbor.previous = current_node
+            queue.remove(current_node)
+    
+    def calc_distance(self, start_node, end_node):
+        self.set_breadth_first_distance_and_previous(start_node)
+        return self.nodes[end_node].distance
+    
+    def calc_shortest_path(self, start_node, end_node):
+        self.set_breadth_first_distance_and_previous(start_node)
+        current_node = self.nodes[end_node]
+
+        nodes = [current_node]
+        while current_node.index != start_node:
+            nodes.append(current_node.previous)
+            current_node = current_node.previous
+        return [node.index for node in nodes][::-1]
 
