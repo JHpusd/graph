@@ -72,9 +72,9 @@ class Graph():
         self.set_breadth_first_distance_and_previous(start_node)
         current_node = self.nodes[end_node]
 
-        nodes = [current_node]
+        node_indices = [current_node.index]
         while current_node.index != start_node:
-            nodes.append(current_node.previous)
+            node_indices.append(current_node.previous.index)
             current_node = current_node.previous
-        return [node.index for node in nodes][::-1]
+        return node_indices[::-1]
 
