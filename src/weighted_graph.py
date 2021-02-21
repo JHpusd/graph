@@ -31,15 +31,17 @@ class WeightedGraph():
         for node in self.nodes:
             node.previous = None
             node.d_val = 999999999999
-        
+
+        nodes_copy = [node for node in self.nodes]
         start_node = self.nodes[start_index]
         start_node.d_val = 0
-
+        
         queue = [start_node]
         visited = []
-        while len(queue) != 0:
-            current_node = queue[0]
+        current_node = queue[0]
+        while len(visited) < len(self.nodes):
             visited.append(current_node)
+            nodes_copy.remove(current_node)
             for neighbor in current_node.neighbors:
                 if neighbor not in visited:
                     weight = self.get_edge_weight(current_node, neighbor)
@@ -48,6 +50,14 @@ class WeightedGraph():
                     neighbor.previous = current_node
                     queue.append(neighbor)
             queue.remove(current_node)
+
+            if len(nodes_copy) != 0:
+                smallest_d_val = nodes_copy[0].d_val
+                current_node = nodes_copy[0]
+                for node in nodes_copy:
+                    if node.d_val < smallest_d_val:
+                        current_node = node
+                        smallest_d_val = node.d_val
     
     def calc_distance(self, start_index, end):
         self.set_distance_and_previous(start_index)
