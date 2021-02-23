@@ -1,3 +1,7 @@
+import sys
+sys.path.append('src')
+from graph import *
+
 class WeightedNode():
     def __init__(self, index, value=None):
         self.index = index
@@ -64,5 +68,15 @@ class WeightedGraph():
         if self.nodes[end].d_val == None:
             return False
         return self.nodes[end].d_val
+    
+    def calc_shortest_path(self, start_index, end):
+        self.set_distance_and_previous(start_index)
+        new_edges = []
+        for a,b in self.edges:
+            if self.nodes[b].d_val - self.nodes[a].d_val == self.weights[(a,b)]:
+                new_edges.append((a,b))
+        demo_graph = Graph(new_edges)
+        demo_graph.build_from_edges()
+        return demo_graph.calc_shortest_path(start_index, end)
 
 
